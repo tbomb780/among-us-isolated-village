@@ -1,10 +1,21 @@
 {
-  "name": "isolated-village-root",
+  "name": "isolated-village",
   "version": "1.0.0",
-  "description": "2D Multiplayer Social Deduction Game (3 Stacks: JS Web, Godot 4, Unity URP)",
+  "description": "2D Multiplayer Social Deduction Game (Among Us / Werewolf / The Thing)",
+  "main": "stack1-js-web/server.js",
   "scripts": {
     "start": "node stack1-js-web/server.js",
-    "web:install": "cd stack1-js-web && npm install",
-    "web:start": "node stack1-js-web/server.js"
-  }
+    "build": "npm install --prefix stack1-js-web",
+    "postinstall": "cd stack1-js-web && npm install"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["multiplayer", "social-deduction", "among-us", "werewolf", "socketio"],
+  "author": "tbomb780",
+  "license": "MIT"
 }
