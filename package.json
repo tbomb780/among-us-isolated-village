@@ -1,0 +1,10 @@
+{
+  "name": "isolated-village-root",
+  "version": "1.0.0",
+  "description": "2D Multiplayer Social Deduction Game (3 Stacks: JS Web, Godot 4, Unity URP)",
+  "scripts": {
+    "start": "node stack1-js-web/server.js",
+    "web:install": "cd stack1-js-web && npm install",
+    "web:start": "node stack1-js-web/server.js"
+  }
+}

@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment and sensitive data
+.env
+.env.local
+*.log
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Godot (for future stack)
+.godot/
+*.translation
+
+# Unity (for future stack)
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/

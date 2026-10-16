@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>The Isolated Village | 2D Social Deduction</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- HTML5 Canvas for 2D Game Rendering -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- MAIN MENU OVERLAY -->
+    <div id="main-menu" class="screen-overlay active">
+      <div class="menu-card">
+        <div class="badge-tag">MULTIPLAYER 2D SOCIAL DEDUCTION</div>
+        <h1 class="game-title">THE ISOLATED VILLAGE</h1>
+        <p class="game-subtitle">A creature lurks among the villagers. Complete your tasks before nightfall...</p>
+
+        <div class="form-group">
+          <label for="player-name-input">PLAYER NAME</label>
+          <input type="text" id="player-name-input" maxlength="14" placeholder="Enter your name..." value="Villager">
+        </div>
+
+        <div class="menu-actions">
+          <button id="btn-host-game" class="btn btn-primary">
+            <span class="icon">🏰</span> HOST GAME
+          </button>
+
+          <div class="join-box">
+            <label for="room-code-input">4-DIGIT ROOM CODE</label>
+            <div class="input-with-button">
+              <input type="text" id="room-code-input" maxlength="4" placeholder="0000" inputmode="numeric" pattern="[0-9]*">
+              <button id="btn-join-game" class="btn btn-secondary">
+                <span class="icon">🚪</span> JOIN
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="how-to-play-box">
+          <h3>📜 HOW TO PLAY</h3>
+          <ul>
+            <li><strong>☀️ Day (45s):</strong> Roam the village, do maintenance tasks, and watch suspicious behavior.</li>
+            <li><strong>🌙 Night (45s):</strong> Pitch darkness falls. The <em>Shapeshifter / Werewolf</em> strikes from the shadows with enhanced night vision!</li>
+            <li><strong>🔔 Emergency:</strong> Ring the Campfire Bell or report a dead body to call a Town Hall vote!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRE-GAME LOBBY OVERLAY -->
+    <div id="lobby-menu" class="screen-overlay">
+      <div class="lobby-header">
+        <div class="room-code-display">
+          <span class="label">ROOM CODE:</span>
+          <span id="display-room-code" class="code-number">----</span>
+          <button id="btn-copy-code" class="btn-icon" title="Copy Room Code">📋</button>
+        </div>
+        <div id="lobby-player-count" class="player-count">Players: 1/10</div>
+      </div>
+
+      <div class="lobby-center-notice">
+        <h2>Village Town Square Lobby</h2>
+        <p>Walk around with WASD or Touch Stick. Waiting for the Host to start...</p>
+      </div>
+
+      <div class="lobby-player-list" id="lobby-player-list">
+        <!-- Player tags dynamically populated -->
+      </div>
+
+      <div class="lobby-host-controls" id="host-controls" style="display: none;">
+        <div class="host-button-row">
+          <button id="btn-start-match" class="btn btn-primary btn-large" disabled>
+            <span class="icon">⚔️</span> START MATCH (Need 3+ Players)
+          </button>
+          <button id="btn-force-start" class="btn btn-warning" title="Test immediately without waiting for 3 players">
+            🧪 DEV FORCE START (1+ Player)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- IN-GAME HUD -->
+    <div id="game-hud" style="display: none;">
+      <!-- Top Status Bar -->
+      <div class="top-hud">
+        <div class="phase-clock-widget" id="phase-clock-widget">
+          <span id="phase-icon" class="phase-icon">☀️</span>
+          <div class="phase-details">
+            <span id="phase-label" class="phase-label">DAY PHASE</span>
+            <span id="phase-timer" class="phase-timer">00:45</span>
+          </div>
+        </div>
+
+        <div class="task-bar-container">
+          <div class="task-bar-label">
+            <span>VILLAGE TASKS</span>
+            <span id="task-count-text">0 / 8 Completed</span>
+          </div>
+          <div class="task-bar-track">
+            <div id="task-bar-fill" class="task-bar-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div id="role-badge" class="role-badge villager">
+          <span class="role-title">ROLE: VILLAGER</span>
+          <span class="role-desc">Complete tasks & survive</span>
+        </div>
+      </div>
+
+      <!-- Action Interaction Prompt -->
+      <div id="interaction-prompt" class="interaction-prompt" style="display: none;">
+        <span class="key-badge">E</span> <span id="prompt-text">Interact</span>
+      </div>
+
+      <!-- Mobile Touch Controls -->
+      <div id="mobile-controls" class="mobile-controls">
+        <div id="joystick-zone" class="joystick-zone">
+          <div id="joystick-base" class="joystick-base">
+            <div id="joystick-thumb" class="joystick-thumb"></div>
+          </div>
+        </div>
+
+        <div class="mobile-action-buttons">
+          <button id="btn-touch-kill" class="touch-action-btn btn-kill" style="display: none;">
+            <span>🩸</span>
+            <small>KILL</small>
+            <div id="kill-cooldown-overlay" class="cooldown-overlay"></div>
+          </button>
+          <button id="btn-touch-report" class="touch-action-btn btn-report" style="display: none;">
+            <span>🔔</span>
+            <small>REPORT</small>
+          </button>
+          <button id="btn-touch-interact" class="touch-action-btn btn-interact">
+            <span>⚙️</span>
+            <small>USE</small>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOWN HALL MEETING & VOTING MODAL -->
+    <div id="meeting-modal" class="screen-overlay">
+      <div class="parchment-modal">
+        <div class="meeting-header">
+          <h2 id="meeting-title">🔔 TOWN HALL EMERGENCY MEETING</h2>
+          <p id="meeting-subtitle">Discussion is underway. Cast your vote before time expires!</p>
+          <div class="meeting-countdown" id="meeting-countdown">30s</div>
+        </div>
+
+        <div class="voting-grid" id="voting-grid">
+          <!-- Dynamically populated with player vote cards -->
+        </div>
+
+        <div class="voting-footer">
+          <button id="btn-skip-vote" class="btn btn-secondary">
+            ⏭️ SKIP VOTE
+          </button>
+          <div id="vote-status-text" class="vote-status-text">0/0 votes recorded</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXILE REVEAL OVERLAY -->
+    <div id="exile-modal" class="screen-overlay">
+      <div class="exile-content">
+        <div class="exile-avatar" id="exile-avatar">👤</div>
+        <h1 id="exile-headline">THE VILLAGE HAS SPOKEN</h1>
+        <p id="exile-subtext">Waiting for verdict...</p>
+        <div id="exile-remaining" class="exile-remaining"></div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE TASK MODAL -->
+    <div id="task-modal" class="screen-overlay">
+      <div class="task-card">
+        <div class="task-card-header">
+          <h3 id="task-modal-title">🔧 Village Task</h3>
+          <button id="btn-close-task" class="btn-close">✕</button>
+        </div>
+        <div class="task-card-body" id="task-modal-body">
+          <!-- Interactive mini-game dynamically injected -->
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME OVER OVERLAY -->
+    <div id="game-over-modal" class="screen-overlay">
+      <div class="game-over-card">
+        <h1 id="game-over-title">MATCH OVER</h1>
+        <p id="game-over-reason">Summary...</p>
+        <div id="werewolf-reveal-box" class="reveal-box"></div>
+        <button id="btn-return-lobby" class="btn btn-primary btn-large">
+          RETURN TO LOBBY
+        </button>
+      </div>
+    </div>
+
+    <!-- Global Toast Notification -->
+    <div id="toast" class="toast">Notification</div>
+  </div>
+
+  <!-- Socket.io Client -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Game Client Engine -->
+  <script src="game.js"></script>
+</body>
+</html>
