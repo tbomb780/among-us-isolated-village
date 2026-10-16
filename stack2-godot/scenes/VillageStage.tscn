@@ -1,0 +1,227 @@
+[gd_scene load_steps=10 format=3 uid="uid://village_stage_01"]
+
+[ext_resource type="Script" path="res://scripts/VillageStage.gd" id="1_stage_script"]
+[ext_resource type="Texture2D" path="res://resources/light_texture.tres" id="2_light_texture"]
+[ext_resource type="Script" path="res://scripts/DayNightCycle.gd" id="3_daynight_script"]
+[ext_resource type="Script" path="res://scripts/TaskStation.gd" id="4_task_script"]
+[ext_resource type="PackedScene" path="res://scenes/VirtualJoystick.tscn" id="5_joystick_scene"]
+[ext_resource type="PackedScene" path="res://scenes/MeetingUI.tscn" id="6_meeting_scene"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(240, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bell"]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_task"]
+radius = 28.0
+
+[node name="VillageStage" type="Node2D"]
+script = ExtResource("1_stage_script")
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="Ground" type="ColorRect" parent="Environment"]
+offset_right = 1600.0
+offset_bottom = 1200.0
+color = Color(0.12, 0.23, 0.12, 1)
+
+[node name="CobblestoneSquare" type="ColorRect" parent="Environment"]
+offset_left = 520.0
+offset_top = 240.0
+offset_right = 760.0
+offset_bottom = 480.0
+color = Color(0.25, 0.29, 0.35, 1)
+
+[node name="Boundaries" type="StaticBody2D" parent="Environment"]
+
+[node name="NorthWall" type="CollisionPolygon2D" parent="Environment/Boundaries"]
+polygon = PackedVector2Array(0, 0, 1600, 0, 1600, 30, 0, 30)
+
+[node name="SouthWall" type="CollisionPolygon2D" parent="Environment/Boundaries"]
+polygon = PackedVector2Array(0, 1170, 1600, 1170, 1600, 1200, 0, 1200)
+
+[node name="WestWall" type="CollisionPolygon2D" parent="Environment/Boundaries"]
+polygon = PackedVector2Array(0, 0, 30, 0, 30, 1200, 0, 1200)
+
+[node name="EastWall" type="CollisionPolygon2D" parent="Environment/Boundaries"]
+polygon = PackedVector2Array(1570, 0, 1600, 0, 1600, 1200, 1570, 1200)
+
+[node name="Campfire" type="Node2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="FireVisual" type="ColorRect" parent="Campfire"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.95, 0.45, 0.1, 1)
+
+[node name="PointLight2D" type="PointLight2D" parent="Campfire"]
+color = Color(1, 0.7, 0.35, 1)
+energy = 1.3
+texture = ExtResource("2_light_texture")
+texture_scale = 1.2
+
+[node name="EmergencyBell" type="Area2D" parent="." groups=["emergency_bell"]]
+position = Vector2(640, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EmergencyBell"]
+shape = SubResource("CircleShape2D_bell")
+
+[node name="BellVisual" type="ColorRect" parent="EmergencyBell"]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+color = Color(0.98, 0.75, 0.14, 1)
+
+[node name="TaskStations" type="Node2D" parent="."]
+
+[node name="ElderHallTask" type="Area2D" parent="TaskStations"]
+position = Vector2(640, 140)
+script = ExtResource("4_task_script")
+task_name = "Translate Ancient Runes"
+station_building = "Elder's Hall"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TaskStations/ElderHallTask"]
+shape = SubResource("CircleShape2D_task")
+
+[node name="IndicatorLight" type="PointLight2D" parent="TaskStations/ElderHallTask"]
+color = Color(0.2, 0.6, 1, 1)
+energy = 0.8
+texture = ExtResource("2_light_texture")
+texture_scale = 0.4
+
+[node name="BlacksmithTask" type="Area2D" parent="TaskStations"]
+position = Vector2(1080, 360)
+script = ExtResource("4_task_script")
+task_name = "Stoke Forge Bellows"
+station_building = "Blacksmith"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TaskStations/BlacksmithTask"]
+shape = SubResource("CircleShape2D_task")
+
+[node name="IndicatorLight" type="PointLight2D" parent="TaskStations/BlacksmithTask"]
+color = Color(0.2, 0.6, 1, 1)
+energy = 0.8
+texture = ExtResource("2_light_texture")
+texture_scale = 0.4
+
+[node name="BarnTask" type="Area2D" parent="TaskStations"]
+position = Vector2(640, 600)
+script = ExtResource("4_task_script")
+task_name = "Clear Mill Gears"
+station_building = "Barn & Mill"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TaskStations/BarnTask"]
+shape = SubResource("CircleShape2D_task")
+
+[node name="IndicatorLight" type="PointLight2D" parent="TaskStations/BarnTask"]
+color = Color(0.2, 0.6, 1, 1)
+energy = 0.8
+texture = ExtResource("2_light_texture")
+texture_scale = 0.4
+
+[node name="ApothecaryTask" type="Area2D" parent="TaskStations"]
+position = Vector2(200, 360)
+script = ExtResource("4_task_script")
+task_name = "Brew Wolfsbane Elixir"
+station_building = "Apothecary"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TaskStations/ApothecaryTask"]
+shape = SubResource("CircleShape2D_task")
+
+[node name="IndicatorLight" type="PointLight2D" parent="TaskStations/ApothecaryTask"]
+color = Color(0.2, 0.6, 1, 1)
+energy = 0.8
+texture = ExtResource("2_light_texture")
+texture_scale = 0.4
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(1, 1, 1, 1)
+script = ExtResource("3_daynight_script")
+
+[node name="DeadBodies" type="Node2D" parent="."]
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="HBoxContainer" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 16.0
+offset_right = 300.0
+offset_bottom = 66.0
+grow_horizontal = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Clock" type="VBoxContainer" parent="HUD/TopBar"]
+layout_mode = 2
+alignment = 1
+
+[node name="PhaseLabel" type="Label" parent="HUD/TopBar/Clock"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "☀️ DAY PHASE"
+
+[node name="TimerLabel" type="Label" parent="HUD/TopBar/Clock"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "00:45"
+
+[node name="TaskContainer" type="VBoxContainer" parent="HUD/TopBar"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="TaskLabel" type="Label" parent="HUD/TopBar/TaskContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Village Tasks: 0 / 8"
+
+[node name="TaskBar" type="ProgressBar" parent="HUD/TopBar/TaskContainer"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+max_value = 8.0
+show_percentage = false
+
+[node name="VirtualJoystick" parent="HUD" instance=ExtResource("5_joystick_scene")]
+
+[node name="MobileButtons" type="VBoxContainer" parent="HUD"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -220.0
+offset_right = -30.0
+offset_bottom = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="BtnUse" type="Button" parent="HUD/MobileButtons"]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+text = "USE"
+
+[node name="BtnKill" type="Button" parent="HUD/MobileButtons"]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+text = "KILL"
+
+[node name="BtnReport" type="Button" parent="HUD/MobileButtons"]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+text = "REPORT"
+
+[node name="MeetingUI" parent="HUD" instance=ExtResource("6_meeting_scene")]
+visible = false

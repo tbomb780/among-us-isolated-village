@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://virtual_joystick_01"]
+
+[ext_resource type="Script" path="res://scripts/VirtualJoystick.gd" id="1_joystick_script"]
+
+[node name="VirtualJoystick" type="Control"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -180.0
+offset_right = 180.0
+offset_bottom = -30.0
+grow_vertical = 0
+script = ExtResource("1_joystick_script")
+
+[node name="Base" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BaseVisual" type="ColorRect" parent="Base"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.15)
+
+[node name="Tip" type="Control" parent="Base"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TipVisual" type="ColorRect" parent="Base/Tip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.5)

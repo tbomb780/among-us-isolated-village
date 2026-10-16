@@ -1,0 +1,89 @@
+[gd_scene load_steps=6 format=3 uid="uid://player_scene_01"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_player_script"]
+[ext_resource type="Texture2D" path="res://resources/light_texture.tres" id="2_light_texture"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 18.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 75.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_sync"]
+properties/0/path = NodePath(".:sync_position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:sync_facing_right")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath(".:sync_is_moving")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:sync_is_alive")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Visuals" type="CanvasGroup" parent="."]
+
+[node name="Shadow" type="ColorRect" parent="Visuals"]
+offset_left = -14.0
+offset_top = 8.0
+offset_right = 14.0
+offset_bottom = 18.0
+color = Color(0, 0, 0, 0.4)
+
+[node name="Body" type="ColorRect" parent="Visuals"]
+offset_left = -16.0
+offset_top = -18.0
+offset_right = 16.0
+offset_bottom = 14.0
+color = Color(0.941176, 0.270588, 0.270588, 1)
+
+[node name="Visor" type="ColorRect" parent="Visuals"]
+offset_left = 2.0
+offset_top = -12.0
+offset_right = 14.0
+offset_bottom = -2.0
+color = Color(0.403922, 0.909804, 0.976471, 1)
+
+[node name="Nameplate" type="Node2D" parent="."]
+position = Vector2(0, -32)
+
+[node name="Label" type="Label" parent="Nameplate"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -14.0
+offset_right = 60.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 12
+text = "Villager"
+horizontal_alignment = 1
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+enabled = false
+energy = 1.2
+texture = ExtResource("2_light_texture")
+texture_scale = 1.0
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("CircleShape2D_interact")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_sync")

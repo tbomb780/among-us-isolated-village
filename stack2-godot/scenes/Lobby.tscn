@@ -1,0 +1,96 @@
+[gd_scene load_steps=2 format=3 uid="uid://lobby_scene_01"]
+
+[ext_resource type="Script" path="res://scripts/Lobby.gd" id="1_lobby_script"]
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lobby_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.09, 0.16, 1)
+
+[node name="Header" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 24.0
+offset_right = -40.0
+offset_bottom = 84.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="RoomCodeLabel" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.62, 0.04, 1)
+theme_override_font_sizes/font_size = 32
+text = "ROOM CODE: ----"
+
+[node name="PlayerCountLabel" type="Label" parent="Header"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Players: 1 / 10"
+
+[node name="PlayerListContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -160.0
+offset_right = 260.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PlayerListContainer"]
+layout_mode = 2
+
+[node name="PlayerList" type="VBoxContainer" parent="PlayerListContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="HostPanel" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -100.0
+offset_right = 260.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="BtnStartMatch" type="Button" parent="HostPanel"]
+custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+disabled = true
+text = "⚔️ START MATCH (3+)"
+
+[node name="BtnForceStart" type="Button" parent="HostPanel"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.7, 0.2, 1)
+theme_override_font_sizes/font_size = 14
+text = "🧪 DEV FORCE START"
